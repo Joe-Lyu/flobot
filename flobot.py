@@ -25,15 +25,33 @@ class FloBot(discord.Client):
             sys.exit()
 
         if message.content.lower().startswith("!add "):
+            print(message.content)
             sentence = message.content.lstrip('!add ')
             with open("sentences.txt",'a') as f:
                 f.write(sentence+'\n')
-            return
+            return await message.reply("Added new line.")
         
         if message.content.lower().startswith('!draw'):
             with open("sentences.txt","r") as f:
                 sentences = f.read().split('\n')
             return await message.reply(random.choice(sentences))
+
+        if message.content.lower().startswith('!list'):
+            with open("sentences.txt","r") as f:
+                sentences = f.read().split('\n')
+            repl = ''
+            for i,sentence in enumerate(sentences):
+                repl += f"{i+1}. {sentence}\n"
+            return await message.reply(repl)
+        
+        if message.content.lower().startswith('!undo'):
+            with open("sentences.txt","r") as f:
+                sentences = f.read().split('\n')
+            sentences.pop(-1)
+            with open("sentences.txt","w") as f:
+                for s in sentences:
+                    f.write(s+'\n')
+            return await message.reply("Deleted last line.")
 
 intents = discord.Intents.default()
 intents.message_content = True
