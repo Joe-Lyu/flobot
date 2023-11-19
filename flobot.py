@@ -33,12 +33,12 @@ class FloBot(discord.Client):
         
         if message.content.lower().startswith('!draw'):
             with open("sentences.txt","r") as f:
-                sentences = f.read().split('\n')
+                sentences = f.read().split('\n')[:-1]
             return await message.reply(random.choice(sentences))
 
         if message.content.lower().startswith('!list'):
             with open("sentences.txt","r") as f:
-                sentences = f.read().split('\n')
+                sentences = f.read().split('\n')[:-1]
             repl = ''
             for i,sentence in enumerate(sentences):
                 repl += f"{i+1}. {sentence}\n"
@@ -46,7 +46,7 @@ class FloBot(discord.Client):
         
         if message.content.lower().startswith('!undo'):
             with open("sentences.txt","r") as f:
-                sentences = f.read().split('\n')
+                sentences = f.read().split('\n')[:-1]
             sentences.pop(-1)
             with open("sentences.txt","w") as f:
                 for s in sentences:
