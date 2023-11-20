@@ -39,7 +39,7 @@ class FloBot(discord.Client):
                 sentences = f.read().split('\n')[:-1]
             repls = []
             for i,sentence in enumerate(sentences):
-                repls.append(f"{i+1}. {sentence}")
+                repls.append(f"{i+1}. {sentence}\n")
 
             msg_l = 0
             msg = ""
@@ -48,7 +48,7 @@ class FloBot(discord.Client):
                 if msg_l > 2000:
                     await message.reply(msg)
                     msg_l = 0
-                    msg = ""
+                    msg = repl
                     continue
                 msg += repl
             if msg == "":
