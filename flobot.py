@@ -1,5 +1,4 @@
 import discord
-import asyncio
 import pickle
 import sys
 import random
@@ -10,9 +9,7 @@ class FloBot(discord.Client):
     async def on_ready(self):
         print(f'Logged in as {self.user} (ID: {self.user.id})')
         print('------')
-        
-
-    
+   
     async def on_message(self, message):
         joe = 803676742639550544
 
@@ -34,15 +31,30 @@ class FloBot(discord.Client):
         if message.content.lower().startswith('!draw'):
             with open("sentences.txt","r") as f:
                 sentences = f.read().split('\n')[:-1]
-            return await message.reply(random.choice(sentences))
-
+            repl = "Drawn:\n"+random.choice(sentences)
+            return await message.author.send(repl)
+        
         if message.content.lower().startswith('!list'):
             with open("sentences.txt","r") as f:
                 sentences = f.read().split('\n')[:-1]
-            repl = ''
+            repls = []
             for i,sentence in enumerate(sentences):
-                repl += f"{i+1}. {sentence}\n"
-            return await message.reply(repl)
+                repls.append(f"{i+1}. {sentence}")
+
+            msg_l = 0
+            msg = ""
+            for repl in repls:
+                msg_l += len(repl)
+                if msg_l > 2000:
+                    await message.reply(msg)
+                    msg_l = 0
+                    msg = ""
+                    continue
+                msg += repl
+            if msg == "":
+                return
+            
+            return await message.reply(msg)
         
         if message.content.lower().startswith('!undo'):
             with open("sentences.txt","r") as f:
